@@ -1,21 +1,32 @@
+<%@page import="com.newlecture.web.entity.Notice"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.util.List"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.Connection"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 
 <head>
-	<title>코딩 전문가를 만들기 위한 온라인 강의 시스템</title>
-	<meta charset="UTF-8">
-	<title>공지사항목록</title>
+<title>코딩 전문가를 만들기 위한 온라인 강의 시스템</title>
+<meta charset="UTF-8">
+<title>공지사항목록</title>
 
-	<link href="/css/customer/layout.css" type="text/css" rel="stylesheet" />
-	<style>
-		#visual .content-container {
-			height: inherit;
-			display: flex;
-			align-items: center;
-
-			background: url("/images/mypage/visual.png") no-repeat center;
-		}
-	</style>
+<link href="/css/customer/layout.css" type="text/css" rel="stylesheet" />
+<style>
+#visual .content-container {
+	height: inherit;
+	display: flex;
+	align-items: center;
+	background: url("/images/mypage/visual.png") no-repeat center;
+}
+</style>
 </head>
 
 <body>
@@ -27,8 +38,7 @@
 			<!-- ---------------------------<header>--------------------------------------- -->
 
 			<h1 id="logo">
-				<a href="/index.html">
-					<img src="/images/logo.png" alt="뉴렉처 온라인" />
+				<a href="/index.html"> <img src="/images/logo.png" alt="뉴렉처 온라인" />
 
 				</a>
 			</h1>
@@ -53,9 +63,8 @@
 						<form action="/course">
 							<fieldset>
 								<legend>과정검색필드</legend>
-								<label>과정검색</label>
-								<input type="text" name="q" value="" />
-								<input type="submit" value="검색" />
+								<label>과정검색</label> <input type="text" name="q" value="" /> <input
+									type="submit" value="검색" />
 							</fieldset>
 						</form>
 					</section>
@@ -72,8 +81,10 @@
 					<nav id="member-menu" class="linear-layout">
 						<h1 class="hidden">고객메뉴</h1>
 						<ul class="linear-layout">
-							<li><a href="/member/home"><img src="/images/txt-mypage.png" alt="마이페이지" /></a></li>
-							<li><a href="/notice/list.html"><img src="/images/txt-customer.png" alt="고객센터" /></a></li>
+							<li><a href="/member/home"><img
+									src="/images/txt-mypage.png" alt="마이페이지" /></a></li>
+							<li><a href="/notice/list.html"><img
+									src="/images/txt-customer.png" alt="고객센터" /></a></li>
 						</ul>
 					</nav>
 
@@ -139,14 +150,12 @@
 					<form class="table-form">
 						<fieldset>
 							<legend class="hidden">공지사항 검색 필드</legend>
-							<label class="hidden">검색분류</label>
-							<select name="f">
+							<label class="hidden">검색분류</label> <select name="f">
 								<option value="title">제목</option>
 								<option value="writerId">작성자</option>
-							</select>
-							<label class="hidden">검색어</label>
-							<input type="text" name="q" value="" />
-							<input class="btn btn-search" type="submit" value="검색" />
+							</select> <label class="hidden">검색어</label> <input type="text" name="q"
+								value="" /> <input class="btn btn-search" type="submit"
+								value="검색" />
 						</fieldset>
 					</form>
 				</div>
@@ -166,69 +175,19 @@
 							</tr>
 						</thead>
 						<tbody>
-
-							<tr>
-								<td>8</td>
-								<td class="title indent text-align-left"><a href="detail.html">스프링 8강까지의 예제 코드</a></td>
-								<td>newlec</td>
-								<td>
-									2019-08-18
-								</td>
-								<td>146</td>
-								<td><input type="checkbox" name="open"></td>
-								<td><input type="checkbox" name="del"></td>
-							</tr>
-
-							<tr>
-								<td>7</td>
-								<td class="title indent text-align-left"><a href="detail.html">스프링 DI 예제 코드</a></td>
-								<td>newlec</td>
-								<td>
-									2019-08-15
-								</td>
-								<td>131</td>
-								<td><input type="checkbox" name="open"></td>
-								<td><input type="checkbox" name="del"></td>
-							</tr>
-
-							<tr>
-								<td>6</td>
-								<td class="title indent text-align-left"><a href="detail.html">뉴렉쌤 9월 초 국기과정 모집 안내</a>
-								</td>
-								<td>newlec</td>
-								<td>
-									2019-06-11
-								</td>
-								<td>517</td>
-								<td><input type="checkbox" name="open"></td>
-								<td><input type="checkbox" name="del"></td>
-							</tr>
-
-							<tr>
-								<td>5</td>
-								<td class="title indent text-align-left"><a href="detail.html">뉴렉처 강의 수강 방식 안내</a></td>
-								<td>newlec</td>
-								<td>
-									2019-05-24
-								</td>
-								<td>448</td>
-								<td><input type="checkbox" name="open"></td>
-								<td><input type="checkbox" name="del"></td>
-							</tr>
-
-							<tr>
-								<td>4</td>
-								<td class="title indent text-align-left"><a href="detail.html">자바 구조적인 프로그래밍 강의 예제
-										파일</a></td>
-								<td>newlec</td>
-								<td>
-									2019-04-24
-								</td>
-								<td>520</td>
-								<td><input type="checkbox" name="open"></td>
-								<td><input type="checkbox" name="del"></td>
-							</tr>
-
+							<c:forEach items="${list }" var="n" begin="0" end="4">
+								<tr>
+									<td>${n.id }</td>
+									<td class="title indent text-align-left"><a
+										href="detail?id=${n.id}">${n.title }[${n.cmtCount}] </a></td>
+									<td>${n.name}</td>
+									<td><fmt:formatDate value="${n.regdate }"
+											pattern="yyyy-MM-dd" /></td>
+									<td>${n.hit }</td>
+									<td><input type="checkbox" name="open"></td>
+									<td><input type="checkbox" name="del"></td>
+								</tr>
+							</c:forEach>
 
 						</tbody>
 					</table>
@@ -236,32 +195,55 @@
 
 				<div class="indexer margin-top align-right">
 					<h3 class="hidden">현재 페이지</h3>
-					<div><span class="text-orange text-strong">1</span> / 1 pages</div>
+					<div>
+						<span class="text-orange text-strong">${empty param.p ? 1 : param.p}</span>
+						/ ${fn:substringBefore(Math.ceil(cnt/5), '.')} pages
+					</div>
 				</div>
-
 				<div class="text-align-right margin-top">
 					<input type="submit" class="btn-text btn-default" value="일괄공개">
 					<input type="submit" class="btn-text btn-default" value="일괄삭제">
-					<a class="btn-text btn-default" href="reg.html">글쓰기</a>				
+					<a class="btn-text btn-default" href="reg.html">글쓰기</a>
 				</div>
 
 				<div class="margin-top align-center pager">
 
 					<div>
+						<c:set var="lastNum"
+							value="${fn:substringBefore(Math.ceil(cnt/5), '.') }" />
+						<c:set var="page" value="${empty param.p ? 1 : param.p }" />
+						<c:set var="startNum" value="${page - (page-1)%5 }" />
+
+						<c:if test="${startNum-1 > 0 }">
+							<a class="btn btn-next"
+								href="?p=${startNum-1 }&f=${param.f }&q=${param.q}">이전</a>
+						</c:if>
+						<c:if test="${startNum-1 <= 0 }">
+							<a class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</a>
+						</c:if>
 
 
-						<span class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</span>
 
 					</div>
 					<ul class="-list- center">
-						<li><a class="-text- orange bold" href="?p=1&t=&q=">1</a></li>
-
+						<c:forEach var="i" begin="0" end="4">
+							<c:if test="${i+startNum <= lastNum }">
+								<li><a
+									class="-text- ${page == (i+startNum) ? 'text-orange
+									text-strong' : '' }"
+									href="?p=${i+startNum }&f=${param.f }&q=${param.q}">${i+startNum}</a></li>
+							</c:if>
+						</c:forEach>
 					</ul>
 					<div>
 
-
-						<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
-
+						<c:if test="${lastNum >= startNum+5 }">
+							<a class="btn btn-next"
+								href="?p=${5+startNum }&f=${param.f }&q=${param.q}">다음</a>
+						</c:if>
+						<c:if test="${lastNum < startNum+5 }">
+							<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
+						</c:if>
 					</div>
 
 				</div>
@@ -277,12 +259,14 @@
 
 	<footer id="footer">
 		<div class="content-container">
-			<h2 id="footer-logo"><img src="/images/logo-footer.png" alt="회사정보"></h2>
+			<h2 id="footer-logo">
+				<img src="/images/logo-footer.png" alt="회사정보">
+			</h2>
 
 			<div id="company-info">
 				<dl>
 					<dt>주소:</dt>
-					<dd>서울특별시 </dd>
+					<dd>서울특별시</dd>
 					<dt>관리자메일:</dt>
 					<dd>admin@newlecture.com</dd>
 				</dl>
@@ -300,8 +284,9 @@
 					<dt>전화번호:</dt>
 					<dd>111-1111-1111</dd>
 				</dl>
-				<div id="copyright" class="margin-top">Copyright ⓒ newlecture.com 2012-2014 All Right Reserved.
-					Contact admin@newlecture.com for more information</div>
+				<div id="copyright" class="margin-top">Copyright ⓒ
+					newlecture.com 2012-2014 All Right Reserved. Contact
+					admin@newlecture.com for more information</div>
 			</div>
 		</div>
 	</footer>

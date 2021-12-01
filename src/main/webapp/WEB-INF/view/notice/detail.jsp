@@ -6,7 +6,9 @@
 <%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 
@@ -161,7 +163,8 @@
 							</tr>
 							<tr>
 								<th>작성일</th>
-								<td class="text-align-left text-indent" colspan="3">${n.regdate}</td>
+								<td class="text-align-left text-indent" colspan="3"><fmt:formatDate
+										value="${n.regdate}" pattern="yyyy-MM-dd hh:mm" /></td>
 							</tr>
 							<tr>
 								<th>작성자</th>
@@ -171,7 +174,15 @@
 							</tr>
 							<tr>
 								<th>첨부파일</th>
-								<td colspan="3">${n.files }</td>
+								<td colspan="3"><c:forTokens varStatus="st" var="file"
+										items="${n.files }" delims=",">
+
+										<a>${fn:toUpperCase(file)}</a>
+										<c:if test="${!st.last }">
+										/
+										</c:if>
+
+									</c:forTokens></td>
 							</tr>
 							<tr class="content">
 								<td colspan="4">${n.content}</td>
@@ -181,7 +192,7 @@
 				</div>
 
 				<div class="margin-top text-align-center">
-					<a class="btn btn-list" href="list.jsp">목록</a>
+					<a class="btn btn-list" href="list">목록</a>
 				</div>
 
 				<div class="margin-top">
@@ -190,8 +201,13 @@
 
 							<tr>
 								<th>다음글</th>
-								<td colspan="3" class="text-align-left text-indent">다음글이
-									없습니다.</td>
+
+								<td colspan="3" class="text-align-left text-indent"><c:if
+										test="${empty next }">
+									다음글이 없습니다.
+								</c:if> <c:if test="${!empty next }">
+										<a class="text-blue text-strong" href="?id=${next.id }"> ${next.title } </a>
+									</c:if></td>
 							</tr>
 
 
@@ -199,8 +215,12 @@
 
 							<tr>
 								<th>이전글</th>
-								<td colspan="3" class="text-align-left text-indent"><a
-									class="text-blue text-strong" href="">스프링 DI 예제 코드</a></td>
+								<td colspan="3" class="text-align-left text-indent"><c:if
+										test="${empty prev }">
+									이전글이 없습니다.
+								</c:if> <c:if test="${!empty prev }">
+										<a class="text-blue text-strong" href="?id=${prev.id }"> ${prev.title } </a>
+									</c:if></td>
 							</tr>
 
 

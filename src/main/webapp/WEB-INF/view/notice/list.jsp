@@ -6,7 +6,9 @@
 <%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 
 
@@ -158,11 +160,11 @@
 						<fieldset>
 							<legend class="hidden">공지사항 검색 필드</legend>
 							<label class="hidden">검색분류</label> <select name="f">
-								<option value="title">제목</option>
-								<option value="writerId">작성자</option>
+								<option ${(param.f == "title") ? "selected" : ""} value="title">제목</option>
+								<option ${(param.f == "name") ? "selected" : ""} value="name">작성자</option>
 							</select> <label class="hidden">검색어</label> <input type="text" name="q"
-								value="" /> <input class="btn btn-search" type="submit"
-								value="검색" />
+								value="${param.q}" /> <input class="btn btn-search"
+								type="submit" value="검색" />
 						</fieldset>
 					</form>
 				</div>
@@ -180,23 +182,19 @@
 							</tr>
 						</thead>
 						<tbody>
-							<%
-							List<Notice> list = (List<Notice>) request.getAttribute("list");
-							for (Notice n : list) {
-								pageContext.setAttribute("n", n);
-							
-							%>
-							<tr>
-								<td>${n.id }</td>
-								<td class="title indent text-align-left"><a
-									href="detail?id=${n.id}"> ${n.title }
-								</a></td>
-								<td>${n.name}</td>
-								<td>${n.regdate }</td>
-								<td>${n.hit }</td>
-							</tr>
 
-							<%} %>
+							<c:forEach items="${list }" var="n" begin="0" end="4">
+								<tr>
+									<td>${n.id }</td>
+									<td class="title indent text-align-left"><a
+										href="detail?id=${n.id}">${n.title }[${n.cmtCount}] </a></td>
+									<td>${n.name}</td>
+									<td><fmt:formatDate value="${n.regdate }"
+											pattern="yyyy-MM-dd" /></td>
+									<td>${n.hit }</td>
+								</tr>
+							</c:forEach>
+
 						</tbody>
 					</table>
 				</div>
@@ -204,27 +202,49 @@
 				<div class="indexer margin-top align-right">
 					<h3 class="hidden">현재 페이지</h3>
 					<div>
-						<span class="text-orange text-strong">1</span> / 1 pages
+						<span class="text-orange text-strong">${empty param.p ? 1 : param.p}</span>
+						/ ${fn:substringBefore(Math.ceil(cnt/5), '.')} pages
 					</div>
 				</div>
 
 				<div class="margin-top align-center pager">
 
 					<div>
+						<c:set var="lastNum"
+							value="${fn:substringBefore(Math.ceil(cnt/5), '.') }" />
+						<c:set var="page" value="${empty param.p ? 1 : param.p }" />
+						<c:set var="startNum" value="${page - (page-1)%5 }" />
+
+						<c:if test="${startNum-1 > 0 }">
+							<a class="btn btn-next"
+								href="?p=${startNum-1 }&f=${param.f }&q=${param.q}">이전</a>
+						</c:if>
+						<c:if test="${startNum-1 <= 0 }">
+							<a class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</a>
+						</c:if>
 
 
-						<span class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</span>
 
 					</div>
 					<ul class="-list- center">
-						<li><a class="-text- orange bold" href="?p=1&t=&q=">1</a></li>
-
+						<c:forEach var="i" begin="0" end="4">
+							<c:if test="${i+startNum <= lastNum }">
+								<li><a
+									class="-text- ${page == (i+startNum) ? 'text-orange
+									text-strong' : '' }"
+									href="?p=${i+startNum }&f=${param.f }&q=${param.q}">${i+startNum}</a></li>
+							</c:if>
+						</c:forEach>
 					</ul>
 					<div>
 
-
-						<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
-
+						<c:if test="${lastNum >= startNum+5 }">
+							<a class="btn btn-next"
+								href="?p=${5+startNum }&f=${param.f }&q=${param.q}">다음</a>
+						</c:if>
+						<c:if test="${lastNum < startNum+5 }">
+							<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
+						</c:if>
 					</div>
 
 				</div>

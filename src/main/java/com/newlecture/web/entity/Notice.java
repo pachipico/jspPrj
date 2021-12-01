@@ -11,6 +11,9 @@ public class Notice {
 	private String content;
 	private String files;
 
+	public Notice() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	public Notice(int id, String title, Date regdate, String name, int hit, String content, String files) {
 		this.id = id;
