@@ -173,10 +173,11 @@
 							</tr>
 							<tr>
 								<th>첨부파일</th>
-								<td colspan="3"><c:forTokens varStatus="st" var="file"
+								<td colspan="3">
+								<c:forTokens varStatus="st" var="file"
 										items="${n.files }" delims=",">
 
-										<a>${fn:toUpperCase(file)}</a>
+										<a download href="/upload/${file }">${fn:toUpperCase(file)}</a>
 										<c:if test="${!st.last }">
 										/
 										</c:if>
@@ -190,9 +191,9 @@
 					</table>
 				</div>
                 <div class="margin-top text-align-center">
-                    <a class="btn-text btn-cancel" href="list.html">목록</a>
-                    <a class="btn-text btn-default" href="edit.html">수정</a>
-                    <a class="btn-text btn-default" href="del.html">삭제</a>
+                    <a class="btn-text btn-cancel" href="list">목록</a>
+                    <a class="btn-text btn-default" href="edit">수정</a>
+                    <a class="btn-text btn-default" href="del">삭제</a>
                 </div>
 
                 <div class="margin-top">

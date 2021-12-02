@@ -12,13 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.newlecture.web.entity.NoticeView;
 import com.newlecture.web.service.NoticeService;
 
-@WebServlet("/admin/notice/list")
+@WebServlet("/admin/board/notice/list")
 public class ListController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		NoticeService service = new NoticeService();
-		System.out.println("doGet");
 		int page = 1;
 		String page_ = req.getParameter("p");
 		String field = "title";
@@ -29,6 +28,7 @@ public class ListController extends HttpServlet {
 		if (page_ != null && !page_.equals("")) {
 			page = Integer.parseInt(page_);
 		}
+
 		if (field_ != null && !field_.equals("")) {
 			field = field_;
 		}
@@ -42,5 +42,32 @@ public class ListController extends HttpServlet {
 		req.setAttribute("list", list);
 		req.setAttribute("cnt", totalCnt);
 		req.getRequestDispatcher("/WEB-INF/view/admin/board/notice/list.jsp").forward(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String[] oIds = req.getParameterValues("open-id");
+		String[] dIds = req.getParameterValues("del-id");
+		String cmd = req.getParameter("cmd");
+		NoticeService service = new NoticeService();
+
+		switch (cmd) {
+		case "일괄공개":
+			System.out.println("open");
+			for (String oid : oIds) {
+				System.out.println(oid);
+			}
+			break;
+		case "일괄삭제":
+			System.out.println("delete");
+			int[] dids = new int[dIds.length];
+			for (int i = 0; i < dIds.length; i++) {
+				dids[i] = Integer.parseInt(dIds[i]);
+			}
+			int result = service.deleteNoticeAll(dids);
+		default:
+			break;
+		}
+		resp.sendRedirect("list");
 	}
 }

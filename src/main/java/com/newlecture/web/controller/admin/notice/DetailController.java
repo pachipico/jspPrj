@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.newlecture.web.entity.Notice;
 import com.newlecture.web.service.NoticeService;
 
-@WebServlet("/admin/notice/detail")
+@WebServlet("/admin/board/notice/detail")
 public class DetailController extends HttpServlet {
 
 	@Override

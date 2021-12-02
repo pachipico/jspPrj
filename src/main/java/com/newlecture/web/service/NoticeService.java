@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +26,49 @@ public class NoticeService {
 	}
 
 	public int insertNotice(Notice notice) {
+		int result = 0;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(jdbcUrl, "root", "jimmywin12");
+			String sql = "insert into notice(title, content, pub, files, memberId) values(? , ? , ? , ? , 1) ";
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, notice.getTitle());
+			st.setString(2, notice.getContent());
+			st.setBoolean(3, notice.getPub());
+			st.setString(4, notice.getFiles());
 
-		return 0;
+			result = st.executeUpdate();
+
+			conn.close();
+			st.close();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
-	public int deleteNotice(int id) {
+	public int deleteNoticeAll(int[] dIds) {
+		int result = 0;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(jdbcUrl, "root", "jimmywin12");
+			Statement st = conn.createStatement();
+			String params = "";
+			for (int i = 0; i < dIds.length; i++) {
+				params += dIds[i];
+				if (i != dIds.length - 1) {
+					params += ",";
+				}
+			}
+			String sql = "delete from notice where id in (" + params + ")";
+			result = st.executeUpdate(sql);
 
-		return 0;
+			conn.close();
+			st.close();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	public int updateNotice(Notice notice) {
@@ -62,11 +99,10 @@ public class NoticeService {
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, "%" + query + "%");
 			st.setInt(2, (page - 1) * 5);
-			System.out.println(st);
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				list.add(new NoticeView(rs.getInt("id"), rs.getString("title"), rs.getDate("regdate"),
-						rs.getString("name"), rs.getInt("hit"), rs.getString("files"), rs.getInt("cmt_count")));
+						rs.getString("name"), rs.getInt("hit"), rs.getString("files"), rs.getInt("cmt_count"), rs.getBoolean("pub")));
 			}
 			conn.close();
 			st.close();
@@ -115,7 +151,7 @@ public class NoticeService {
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
 				notice = new Notice(rs.getInt("id"), rs.getString("title"), rs.getDate("regdate"), rs.getString("name"),
-						rs.getInt("hit"), rs.getString("content"), rs.getString("files"));
+						rs.getInt("hit"), rs.getString("content"), rs.getString("files"), rs.getBoolean("pub"));
 			}
 			conn.close();
 			st.close();
@@ -138,7 +174,7 @@ public class NoticeService {
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
 				notice = new Notice(rs.getInt("id"), rs.getString("title"), rs.getDate("regdate"), rs.getString("name"),
-						rs.getInt("hit"), rs.getString("content"), rs.getString("files"));
+						rs.getInt("hit"), rs.getString("content"), rs.getString("files"), rs.getBoolean("pub"));
 			}
 			conn.close();
 			st.close();
@@ -161,7 +197,7 @@ public class NoticeService {
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
 				notice = new Notice(rs.getInt("id"), rs.getString("title"), rs.getDate("regdate"), rs.getString("name"),
-						rs.getInt("hit"), rs.getString("content"), rs.getString("files"));
+						rs.getInt("hit"), rs.getString("content"), rs.getString("files"), rs.getBoolean("pub"));
 			}
 			conn.close();
 			st.close();
